@@ -6,6 +6,7 @@ class MagicSquare {
     private int[][] square;
     private boolean found;
     private Random randNum;
+    
     // constructor -- set the size and instantiate the array
     public MagicSquare(int size) {
         this.size = size;
@@ -48,7 +49,6 @@ class MagicSquare {
                     num[tempRandNum] = num[tempNumSize-1];
                     num[tempNumSize-1] = tempNum;
                     tempNumSize--;
-                    //System.out.println("tempNumSize: " + tempNumSize);
                 }
             }
 
@@ -65,24 +65,32 @@ class MagicSquare {
     
         return result;
     }
-    /*
+    
     // force last number in each row
     public int endOfRow(int tries) {
-
         while (!found && tryCt < tries) {
-            int tempNumSize = sizeSqr;
-
+            boolean ok = true;
+            int tempNumSize = sizeSqr, rowSum = 0, lastIndex = 0, pick = 0;
             //This is how I filled the magic square array.
             //Many statements are missing, but this should
             //give you some ideas.Notice the ok variable. 
             //If at any time a row cannot befinished there’s no point in continuing to later rows.
             
-            // fills rows one at a time
-            for (row = 0; row < size && ok; row++) {
-                
-                // put random values in all but the last spot
-                for (col = 0; col < size - 1; col++) {
+            int[] sortedNum;
+            sortedNum = num.clone();
 
+            // fills rows one at a time
+            for (int rowCt = 0; rowCt < size && ok; rowCt++) {
+                rowSum = 0;
+                // put random values in all but the last spot
+                for (int colCt = 0; colCt < size - 1; colCt++) {
+                    int tempRandNum = randNum.nextInt(tempNumSize);
+                    square[rowCt][colCt] = num[tempRandNum];
+                    rowSum += num[tempRandNum];
+                    int tempNum = num[tempRandNum];
+                    num[tempRandNum] = num[tempNumSize-1];
+                    num[tempNumSize-1] = tempNum;
+                    tempNumSize--;
                 }
                 
                 // Following is the code to place the last element ina row. 
@@ -90,24 +98,33 @@ class MagicSquare {
                 // call local method to find needed last element
                 // num is the array described above.
                 // pick points to that element in the num array
-
-                pick = find(magicSum - rowsum, num, lastNum);
+                lastIndex = tempNumSize;
+                pick = find(magicSum - rowSum, num, lastIndex);
 
                 if (pick == -1)
                     ok = false;
                 else {
-
+                    int tempNum = num[pick];
+                    num[pick] = num[tempNumSize-1];
+                    num[tempNumSize-1] = tempNum;
+                    tempNumSize--;
+                    square[rowCt][size-1] = tempNum;
                 }
             }
             found = magic();
+            num = sortedNum.clone();
+            tryCt++;
         }
         
-        if (found)
-            return tryCt;
-        else
-            return -1;
+        if (found) {
+
+        } else {
+            tryCt = -1;
+        }
+
+        return tryCt;
     }
-    */
+    
     //No hints for this one (yet), but it is hard. 
     //Concentrate on the first two
     //algorithms and work on this as time allows.
@@ -139,9 +156,10 @@ class MagicSquare {
 
         //checks the two diagnols to see if they are equal to magic sum
         int tempSize = size-1;
+        
         for(int i = 0; i < size; i++){
             diagnolSum1 += square[i][i];
-            diagnolSum2 += square[tempSize][tempSize];
+            diagnolSum2 += square[tempSize][i];
             tempSize--;
         }
 
@@ -153,7 +171,7 @@ class MagicSquare {
         }
 
         //This function will only return true if all rows and colums are equal to the magic number as well as both diagnols
-        if (trueRow == size && trueCol == size && trueDiag == size/2) {
+        if (trueRow == size && trueCol == size && trueDiag == 2) {
             found = true;
         }
 
@@ -171,6 +189,22 @@ class MagicSquare {
         }
     }
     
+    private int find(int numToFind,int[] numArr,int lastIndex) {
+        int index = 0;
+        if(numToFind <= sizeSqr) {
+            while(numArr[index] != numToFind && index < lastIndex-1) {
+                index++;
+            }
+        } else {
+            //Number is not found return index of -1
+            index = -1;
+        }
+        if(index == -1 || numArr[index] != numToFind) {
+            index = -1;
+        }
+        return index;
+    }
+
     // change to false if this algorithm was not implemented
     public boolean rowLastImplemented() {
         return true;
