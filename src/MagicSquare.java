@@ -6,7 +6,7 @@ class MagicSquare {
     private int[][] square;
     private boolean found;
     private Random randNum;
-    
+
     // constructor -- set the size and instantiate the array
     public MagicSquare(int size) {
         this.size = size;
@@ -87,9 +87,7 @@ class MagicSquare {
                     int tempRandNum = randNum.nextInt(tempNumSize);
                     square[rowCt][colCt] = num[tempRandNum];
                     rowSum += num[tempRandNum];
-                    int tempNum = num[tempRandNum];
-                    num[tempRandNum] = num[tempNumSize-1];
-                    num[tempNumSize-1] = tempNum;
+                    swap(tempRandNum, tempNumSize-1, num);
                     tempNumSize--;
                 }
                 
@@ -105,8 +103,7 @@ class MagicSquare {
                     ok = false;
                 else {
                     int tempNum = num[pick];
-                    num[pick] = num[tempNumSize-1];
-                    num[tempNumSize-1] = tempNum;
+                    swap(pick, tempNumSize-1, num);
                     tempNumSize--;
                     square[rowCt][size-1] = tempNum;
                 }
@@ -116,9 +113,7 @@ class MagicSquare {
             tryCt++;
         }
         
-        if (found) {
-
-        } else {
+        if (!found) {
             tryCt = -1;
         }
 
@@ -129,9 +124,63 @@ class MagicSquare {
     //Concentrate on the first two
     //algorithms and work on this as time allows.
     //put pairs of numbers in rows
-    //public int pairs(int tries) {
 
-    //}
+    //the numbers which are going to be the pair magic sum need to change based on if the magic sum is divisable by 2 if its not then one would be the int division and the other would be that same number + 1
+    public int pairs(int tries) {
+        int[] indexArr = new int[size];
+        //int pairMagicSum = magicSum/(size/2);
+        int pairMagicSum = magicSum/2;
+        boolean ok = true;
+        tryCt = 0;
+        found = false;
+
+        for(int i = 0; i < size; i++) {
+            indexArr[i] = i;
+        }
+
+        while(!found && tryCt < tries) {
+            int indexArrSize = size, tempNumSize = sizeSqr, firstNumPair = 0, pick = 0;
+
+            for(int rowCt = 0; rowCt < size && ok; rowCt++) {
+                firstNumPair = 0;
+                indexArrSize = size;
+                for(int colCt = 0; colCt < size/2; colCt++) {
+                    int tempRandNum = randNum.nextInt(tempNumSize);
+                    int randCol = randNum.nextInt(indexArrSize);
+                    firstNumPair = num[tempRandNum];
+
+                    square[rowCt][indexArr[randCol]] = num[tempRandNum];
+                    swap(randCol, indexArrSize-1, indexArr);
+                    swap(tempRandNum, tempNumSize-1, num);
+                    indexArrSize--;
+                    tempNumSize--;
+
+                    pick = find(pairMagicSum - firstNumPair, num, tempNumSize);
+
+                    if(pick == -1) {
+                        ok = false;
+                    } else {
+                        randCol = randNum.nextInt(indexArrSize);
+                        square[rowCt][indexArr[randCol]] = num[pick];
+                        swap(randCol, indexArrSize-1, indexArr);
+                        swap(pick, tempNumSize-1, num);
+                        indexArrSize--;
+                        tempNumSize--;
+                    }
+                }
+
+            }
+            found = magic();
+            tryCt++;
+        }
+
+        if (!found) {
+            tryCt = -1;
+        }
+
+        return tryCt;
+
+    }
     
     // determine if a magic square has been created, i.e., check all rows, columns,
     // and diagonals sum to the same value
@@ -189,9 +238,9 @@ class MagicSquare {
         }
     }
     
-    private int find(int numToFind,int[] numArr,int lastIndex) {
+    private static int find(int numToFind,int[] numArr,int lastIndex) {
         int index = 0;
-        if(numToFind <= sizeSqr) {
+        if(numToFind <= numArr.length) {
             while(numArr[index] != numToFind && index < lastIndex-1) {
                 index++;
             }
@@ -203,6 +252,15 @@ class MagicSquare {
             index = -1;
         }
         return index;
+    }
+
+    private static void swap(int firstIndex, int secondIndex, int[] arr){
+        if(secondIndex == 0) {
+            secondIndex = 0;
+        }
+        int tempNum = arr[firstIndex];
+        arr[firstIndex] = arr[secondIndex];
+        arr[secondIndex] = tempNum;
     }
 
     // change to false if this algorithm was not implemented
