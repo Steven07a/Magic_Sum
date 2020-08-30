@@ -1,3 +1,11 @@
+/*
+ * Author: Steven Herrera
+ * Project: MagicSquare
+ * Purpose: To test three different algorithims which are meant to find a Magic Square 
+*           which is a square where all rows columns and diagnols add up to the same number.
+ *
+ * Notes: 
+ */
 import java.util.Random;
 
 class MagicSquare {
@@ -40,7 +48,6 @@ class MagicSquare {
         sortedNum = num.clone();
         while (!found && tryCt < tries) {
             int tempNumSize = sizeSqr;
-            
             for(int i = 0; i < row; i++) {
                 for(int j = 0; j < col; j++) {
                     int tempRandNum = randNum.nextInt(tempNumSize);
@@ -71,6 +78,7 @@ class MagicSquare {
         while (!found && tryCt < tries) {
             boolean ok = true;
             int tempNumSize = sizeSqr, rowSum = 0, lastIndex = 0, pick = 0;
+
             //This is how I filled the magic square array.
             //Many statements are missing, but this should
             //give you some ideas.Notice the ok variable. 
@@ -128,8 +136,8 @@ class MagicSquare {
     //the numbers which are going to be the pair magic sum need to change based on if the magic sum is divisable by 2 if its not then one would be the int division and the other would be that same number + 1
     public int pairs(int tries) {
         int[] indexArr = new int[size];
-        //int pairMagicSum = magicSum/(size/2);
-        int pairMagicSum = magicSum/2;
+        int pairMagicSum = magicSum/(size/2);
+        //int pairMagicSum = magicSum/2;
         boolean ok = true;
         tryCt = 0;
         found = false;

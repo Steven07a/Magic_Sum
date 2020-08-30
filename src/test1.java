@@ -25,7 +25,7 @@ public class test1 {
 		}
 
 		if (sq.rowLastImplemented()) {
-			sq = new MagicSquare(4);
+			sq = new MagicSquare(6);
 			ct = sq.pairs(10);
 			if (ct == -1) {
 				System.out.println("\nFailed to find an n = 4 solution in 10 tries using pairs trick.");
@@ -33,7 +33,7 @@ public class test1 {
 				System.out.println("\nn = 4 solution in " + ct + " tries.");
 				sq.out();
 			}
-			ct = sq.pairs(10000000);
+			ct = sq.pairs(1000000000);
 			if (ct == -1) {
 				System.out.println("\nFailed to find an n = 4 solution in 10000000 using pairs trick.");
 			} else {
