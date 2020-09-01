@@ -1,9 +1,13 @@
 /*
  * Author: Steven Herrera
+ * Class: CS 282 
+ * Meeting Time: M,W 3:30 - 4:45pm
+ * Assignment #1
  * Project: MagicSquare
  * Purpose: To test three different algorithims which are meant to find a Magic Square 
-*           which is a square where all rows columns and diagnols add up to the same number.
- *
+ *          which is a square where all rows columns and diagnols add up to the same number.
+ * 
+ * Date turned in: 
  * Notes: 
  */
 import java.util.Random;
@@ -41,15 +45,14 @@ class MagicSquare {
     // purely random -- give up after "tries" tries
     public int purelyRandom(int tries) {
         int result = 0;
-
-        //This is how I set up the main loop. I’m showing you as a hint.
-        //Yours can be different. But why mess with a good thing?  :)
         int[] sortedNum;
         sortedNum = num.clone();
         while (!found && tryCt < tries) {
             int tempNumSize = sizeSqr;
             for(int i = 0; i < row; i++) {
                 for(int j = 0; j < col; j++) {
+                    //We get a random number and place it into the square this continues 
+                    //till the entire square is filled
                     int tempRandNum = randNum.nextInt(tempNumSize);
                     square[i][j] = num[tempRandNum];
                     int tempNum = num[tempRandNum];
@@ -64,7 +67,7 @@ class MagicSquare {
             tryCt++;
         }
         
-        //This is how my method ends
+        //If found is true then that means we have a correct Magic Square
         if (found)
             result = tryCt;
         else
@@ -73,16 +76,11 @@ class MagicSquare {
         return result;
     }
     
-    // force last number in each row
+    // Algorithim which forces last number in each row
     public int endOfRow(int tries) {
         while (!found && tryCt < tries) {
             boolean ok = true;
             int tempNumSize = sizeSqr, rowSum = 0, lastIndex = 0, pick = 0;
-
-            //This is how I filled the magic square array.
-            //Many statements are missing, but this should
-            //give you some ideas.Notice the ok variable. 
-            //If at any time a row cannot befinished there’s no point in continuing to later rows.
             
             int[] sortedNum;
             sortedNum = num.clone();
@@ -98,18 +96,16 @@ class MagicSquare {
                     swap(tempRandNum, tempNumSize-1, num);
                     tempNumSize--;
                 }
-                
-                // Following is the code to place the last element ina row. 
-                // Again, you can change these lines if you like.
-                // call local method to find needed last element
-                // num is the array described above.
-                // pick points to that element in the num array
+                // Searches for the final number which would make this row work for a 
+                // magic square if none is found then set ok to false 
                 lastIndex = tempNumSize;
                 pick = find(magicSum - rowSum, num, lastIndex);
 
                 if (pick == -1)
                     ok = false;
                 else {
+                    // If we found a number which works then we add that number to the square 
+                    // and remove that number from our pool of available numbers
                     int tempNum = num[pick];
                     swap(pick, tempNumSize-1, num);
                     tempNumSize--;
@@ -127,17 +123,12 @@ class MagicSquare {
 
         return tryCt;
     }
-    
-    //No hints for this one (yet), but it is hard. 
-    //Concentrate on the first two
-    //algorithms and work on this as time allows.
-    //put pairs of numbers in rows
 
-    //the numbers which are going to be the pair magic sum need to change based on if the magic sum is divisable by 2 if its not then one would be the int division and the other would be that same number + 1
+    //This algorithim works by getting a random number from our available numbers then searching for its pair.
+    //it does this until the square is either complete or until we are unable to find one at which point it exits the loop 
     public int pairs(int tries) {
         int[] indexArr = new int[size];
         int pairMagicSum = magicSum/(size/2);
-        //int pairMagicSum = magicSum/2;
         boolean ok = true;
         tryCt = 0;
         found = false;
@@ -153,21 +144,24 @@ class MagicSquare {
                 firstNumPair = 0;
                 indexArrSize = size;
                 for(int colCt = 0; colCt < size/2; colCt++) {
+                    // we get a random number and random column and place our number into that spot inside the square
                     int tempRandNum = randNum.nextInt(tempNumSize);
                     int randCol = randNum.nextInt(indexArrSize);
+                    
                     firstNumPair = num[tempRandNum];
-
                     square[rowCt][indexArr[randCol]] = num[tempRandNum];
                     swap(randCol, indexArrSize-1, indexArr);
                     swap(tempRandNum, tempNumSize-1, num);
                     indexArrSize--;
                     tempNumSize--;
-
+                    //we use the find function to search through our number array if we cant find that number then we exit 
                     pick = find(pairMagicSum - firstNumPair, num, tempNumSize);
 
                     if(pick == -1) {
                         ok = false;
                     } else {
+                        //When the other half of the pair is found then we insert it into the array at a random column and remove that number from our 
+                        //array of possible columns and numbers
                         randCol = randNum.nextInt(indexArrSize);
                         square[rowCt][indexArr[randCol]] = num[pick];
                         swap(randCol, indexArrSize-1, indexArr);
@@ -246,6 +240,7 @@ class MagicSquare {
         }
     }
     
+    // takes the number to find and does a linear search through the number array if its found return its index otherwise return -1
     private static int find(int numToFind,int[] numArr,int lastIndex) {
         int index = 0;
         if(numToFind <= numArr.length) {
@@ -262,6 +257,7 @@ class MagicSquare {
         return index;
     }
 
+    //function which is used to swap numbers inside of an array
     private static void swap(int firstIndex, int secondIndex, int[] arr){
         if(secondIndex == 0) {
             secondIndex = 0;
