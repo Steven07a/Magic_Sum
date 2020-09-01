@@ -3,12 +3,34 @@ public class test1 {
 
 	public static void main(String[] args) {
 		MagicSquare sq = new MagicSquare(3);
-		int ct = sq.endOfRow(1000000000);
+		int ct = sq.purelyRandom(1000000000);
 
 		if (ct == -1) {
-			System.out.println("Failed to find an n = 3 solution.");
+			System.out.println("Failed to find an n = 3 solution using purely random.");
 		} else {
 			System.out.println("\nn = 3 solution in " + ct + " tries.");
+			sq.out();
+			System.out.println();
+		}
+		
+		sq = new MagicSquare(4);
+		ct = sq.purelyRandom(100000000);
+
+		if (ct == -1) {
+			System.out.println("Failed to find an n = 4 solution using purely random.");
+		} else {
+			System.out.println("\nn = 4 solution in " + ct + " tries.");
+			sq.out();
+			System.out.println();
+		}
+
+		sq = new MagicSquare(3);
+		ct = sq.endOfRow(100000000);
+
+		if (ct == -1) {
+			System.out.println("Failed to find an n = 3 solution using end of row trick.");
+		} else {
+			System.out.println("n = 3 solution in " + ct + " tries.");
 			sq.out();
 			System.out.println();
 		}
@@ -25,7 +47,7 @@ public class test1 {
 		}
 
 		if (sq.rowLastImplemented()) {
-			sq = new MagicSquare(6);
+			sq = new MagicSquare(4);
 			ct = sq.pairs(10);
 			if (ct == -1) {
 				System.out.println("\nFailed to find an n = 4 solution in 10 tries using pairs trick.");

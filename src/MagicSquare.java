@@ -7,7 +7,7 @@
  * Purpose: To test three different algorithims which are meant to find a Magic Square 
  *          which is a square where all rows columns and diagnols add up to the same number.
  * 
- * Date turned in: 
+ * Date turned in: 9/1/20
  * Notes: 
  */
 import java.util.Random;
